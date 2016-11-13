@@ -104,7 +104,10 @@ public:
     }
 
     void travel() {
-        Position p = header;
+        if (NULL == header) {
+            return;
+        }
+        Position p = header->next;
         while (NULL != p) {
             cout << p->n << ',';
             p = p->next;
