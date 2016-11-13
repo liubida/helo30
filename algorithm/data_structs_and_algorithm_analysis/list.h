@@ -1,31 +1,120 @@
-
 #ifndef _LIST_H
 
 #define _LIST_H
 
-struct Node;
-typedef struct Node * PtrToNode;
-typedef PtrToNode List;
-typedef PtrToNode Position;
+#include <iostream>
+#include <string.h>
 
-List MakeEmpty(List L);
-int IsEmpty(List L);
-int IsLast(List L, Position P);
-Position Find(List L, Node N);
-void Delete(List L, Node N);
-Position FindPrevious(List L, Node N);
-void Insert(List L, Position P, Node N);
-void DeleteList(List L);
-Position Header(List L);
-Position First(List L);
-Position Advance(Position P);
-Node Retrieve(Position P);
+using namespace std;
+
+class Node;
+typedef Node * Position;
+
+class Node {
+public:
+    int n;
+    Position next;
+    Node() {
+        n = 0;
+        next = NULL;
+    }
+
+    Node(int x) {
+        n = x;
+        next = NULL;
+    }
+};
+
+class List {
+
+private:
+    Position header;
+    
+public:
+    List() {
+        header = new Node();
+    }
+
+    ~List() {
+        if (NULL == header) {
+            return;
+        }
+    
+        Position p = header->next;
+        while (NULL != p) {
+            header->next = p->next;
+            delete p;
+            p = header->next;
+        }
+    }
+    
+    void insert(Position p, int n) {
+        Position q = new Node(n);
+
+        if (NULL == p) {
+            q->next = header->next;
+            header->next = q;
+        } else {
+            q->next = p->next;
+            p->next = q;
+        }
+    }
+    
+    void Delete(int n) {
+        Position p = FindPrevious(n);
+        if (NULL == p || NULL == p->next) {
+            return;
+        }
+    
+        Position q = p->next;
+        p->next = q->next;
+        delete q;
+    
+        return;
+    }
+
+    int IsEmpty() {
+        return header->next == NULL;
+    }
+    
+    Position Find(int n) {
+        if (NULL == header) {
+            return NULL;
+        }
+    
+        Position p = header->next;
+        while (NULL != p && p->n != n) {
+            p = p->next;
+        }
+    
+        return p;
+    }
+    
+    Position FindPrevious(int n) {
+        if (NULL == header) {
+            return NULL;
+        }
+    
+        Position p = header->next;
+        while (NULL != p && NULL != p->next && p->next->n != n) {
+            p = p->next;
+        }
+    
+        return p;
+    }
+
+    void travel() {
+        Position p = header;
+        while (NULL != p) {
+            cout << p->n << ',';
+            p = p->next;
+        }
+    }
+    //
+    //int Retrieve(Position P);
+
+};
+
 
 #endif  // _LIST_H
-
-struct Node {
-    int n
-    Position next;
-}
-
 
